@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TING.COM Services</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>TING.COM Services</h2>
+
+<!-- USER STATUS -->
+<div id="status">Loading user...</div>
+
+<button onclick="logout()">Logout</button>
+
+<hr>
+
+<!-- BOOKING -->
+<h3>Book Service</h3>
+
+<input id="name" placeholder="Name">
+<br><br>
+
+<input id="service" placeholder="Service">
+<br><br>
+
+<button onclick="bookService()">Submit</button>
+
+<p id="result"></p>
+
+<hr>
+
+<!-- BOOKINGS -->
+<h3>Bookings</h3>
+<div id="bookings"></div>
+
+<script>
+async function loadUser() {
+    const res = await fetch("http://127.0.0.1:3000/api/me");
+    const data = await res.json();
+
+    document.getElementById("status").innerText =
+        data.loggedIn ? "Welcome " + data.user.username : "Not logged in";
+}
+
+async function logout() {
+    await fetch("http://127.0.0.1:3000/api/logout", {
+        method: "POST"
+    });
+
+    location.reload();
+}
+
+async function bookService() {
+    const name = document.getElementById("name").value;
+    const service = document.getElementById("service").value;
+
+    const res = await fetch("http://127.0.0.1:3000/api/bookings", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ name, service })
+    });
+
+    const data = await res.json();
+    document.getElementById("result").innerText = data.message;
+    loadBookings();
+}
+
+async function loadBookings() {
+    const res = await fetch("http://127.0.0.1:3000/api/bookings");
+    const data = await res.json();
+
+    let html = "";
+    data.forEach(b => {
+        html += `<p><b>${b.name}</b> → ${b.service}</p>`;
+    });
+
+    document.getElementById("bookings").innerHTML = html;
+}
+
+loadUser();
+loadBookings();
+</script>
+
+</body>
+</html>
