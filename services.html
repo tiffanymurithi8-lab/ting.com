@@ -4,33 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - TING.COM</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #0f172a;
+            color: white;
+        }
+
+        nav {
+            background: #111827;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .box {
+            margin: 50px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
 <nav>
-    <div class="logo">TING.COM</div>
+    <div><b>TING.COM</b></div>
 
     <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="login.html">Login</a></li>
     </ul>
 </nav>
 
-<!-- BOOKING SECTION -->
-<div style="margin: 40px;">
+<div class="box">
 
     <h2>Book a Service</h2>
 
     <input type="text" id="name" placeholder="Your Name">
-    <br><br>
-
     <input type="text" id="service" placeholder="Service (e.g Repair)">
-    <br><br>
 
     <button onclick="bookService()">Book Now</button>
 
@@ -42,9 +91,10 @@
 async function bookService() {
     const name = document.getElementById("name").value;
     const service = document.getElementById("service").value;
+    const result = document.getElementById("result");
 
     if (!name || !service) {
-        document.getElementById("result").innerText = "Please fill all fields";
+        result.innerText = "Please fill all fields";
         return;
     }
 
@@ -58,10 +108,12 @@ async function bookService() {
         });
 
         const data = await response.json();
-        document.getElementById("result").innerText = data.message;
+
+        result.innerText = data.message;
 
     } catch (error) {
-        document.getElementById("result").innerText = "Server error";
+        console.log(error);
+        result.innerText = "Server error";
     }
 }
 </script>
