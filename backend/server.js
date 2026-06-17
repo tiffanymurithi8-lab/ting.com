@@ -1,10 +1,13 @@
+const cors = require("cors");
+const express = require("express");
 const express = require('express');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const db = require('./database');
 
-const app = express();
-
+const app = express()
+app.use(cors());
+app.use(express.json());
 // ===== MIDDLEWARE =====
 app.use(express.json());
 
