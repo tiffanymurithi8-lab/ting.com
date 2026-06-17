@@ -2,85 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TING.COM Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - TING.COM</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<h2>TING.COM Services</h2>
+<nav>
+    <div class="logo">TING.COM</div>
 
-<!-- USER STATUS -->
-<div id="status">Loading user...</div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Login</a></li>
+    </ul>
+</nav>
 
-<button onclick="logout()">Logout</button>
+<!-- BOOKING SECTION -->
+<div style="margin: 40px;">
 
-<hr>
+    <h2>Book a Service</h2>
 
-<!-- BOOKING -->
-<h3>Book Service</h3>
+    <input type="text" id="name" placeholder="Your Name">
+    <br><br>
 
-<input id="name" placeholder="Name">
-<br><br>
+    <input type="text" id="service" placeholder="Service (e.g Repair)">
+    <br><br>
 
-<input id="service" placeholder="Service">
-<br><br>
+    <button onclick="bookService()">Book Now</button>
 
-<button onclick="bookService()">Submit</button>
+    <p id="result"></p>
 
-<p id="result"></p>
+</div>
 
-<hr>
-
-<!-- BOOKINGS -->
-<h3>Bookings</h3>
-<div id="bookings"></div>
-
-<script>
-async function loadUser() {
-    const res = await fetch("http://127.0.0.1:3000/api/me");
-    const data = await res.json();
-
-    document.getElementById("status").innerText =
-        data.loggedIn ? "Welcome " + data.user.username : "Not logged in";
-}
-
-async function logout() {
-    await fetch("http://127.0.0.1:3000/api/logout", {
-        method: "POST"
-    });
-
-    location.reload();
-}
-
-async function bookService() {
-    const name = document.getElementById("name").value;
-    const service = document.getElementById("service").value;
-
-    const res = await fetch("http://127.0.0.1:3000/api/bookings", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ name, service })
-    });
-
-    const data = await res.json();
-    document.getElementById("result").innerText = data.message;
-    loadBookings();
-}
-
-async function loadBookings() {
-    const res = await fetch("http://127.0.0.1:3000/api/bookings");
-    const data = await res.json();
-
-    let html = "";
-    data.forEach(b => {
-        html += `<p><b>${b.name}</b> → ${b.service}</p>`;
-    });
-
-    document.getElementById("bookings").innerHTML = html;
-}
-
-loadUser();
-loadBookings();
 <script>
 async function bookService() {
     const name = document.getElementById("name").value;
@@ -104,7 +61,7 @@ async function bookService() {
         document.getElementById("result").innerText = data.message;
 
     } catch (error) {
-        document.getElementById("result").innerText = "Error connecting to server";
+        document.getElementById("result").innerText = "Server error";
     }
 }
 </script>
